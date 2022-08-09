@@ -9,3 +9,75 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Skill {
+  id                String              @id @default(uuid())
+  skill_code        String              @unique
+  description       String?
+  year              String[]
+  ExamSkills        ExamSkills[]
+  StudentExamSkills StudentExamSkills[]
+
+  @@map("skills")
+}
+
+model Exam {
+  id                String              @id @default(uuid())
+  name              String
+  total_points      Int
+  class_id          String
+  exam_date         String
+  ExamSkills        ExamSkills[]
+  StudentExam       StudentExam[]
+  StudentExamSkills StudentExamSkills[]
+
+  @@map("exams")
+}
+
+model ExamSkills {
+  id       String @id @default(uuid())
+  skill_id String
+  points   Int
+  class_id String
+  exam_id  String
+  exam     Exam   @relation(fields: [exam_id], references: [id])
+  skill    Skill  @relation(fields: [skill_id], references: [id])
+
+  @@map("exams_skills")
+}
+
+model Student {
+  id                String              @id @default(uuid())
+  name              String
+  schoolar_year     String
+  class_id          String
+  StudentExam       StudentExam[]
+  StudentExamSkills StudentExamSkills[]
+
+  @@map("students")
+}
+
+model StudentExam {
+  id           String  @id @default(uuid())
+  student_id   String
+  exam_id      String
+  student      Student @relation(fields: [student_id], references: [id])
+  exam         Exam    @relation(fields: [exam_id], references: [id])
+  class_id     String
+  total_points Int
+
+  @@map("students_exams")
+}
+
+model StudentExamSkills {
+  id           String  @id @default(uuid())
+  student_id   String
+  exam_id      String
+  skill_id     String
+  skill_points Int?
+  student      Student @relation(fields: [student_id], references: [id])
+  exam         Exam    @relation(fields: [exam_id], references: [id])
+  skill        Skill   @relation(fields: [skill_id], references: [id])
+
+  @@map("students_exams_skills")
+}

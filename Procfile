@@ -1,1 +1,1 @@
-web: node dist/infrastructure/http/server.js
+web: node start

@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { boilerplateRoutes } from "./boilerplate.routes";
+import { examsRoutes } from "./exams.routes";
 
 const router = Router();
 
-router.use("/boilerplate", boilerplateRoutes);
+router.use("/exams", examsRoutes);
 
 export { router };
